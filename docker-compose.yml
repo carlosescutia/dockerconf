@@ -1,0 +1,33 @@
+############################################
+# proxy - Proxy nginx para servidor de publicación
+############################################
+#
+# volumen /certbot: certificados letsencrypt (certbot).
+# volumen /certs: certificados proporcionados ya generados.
+
+version: '3'
+
+# Services
+services:
+
+    # Nginx service
+    nginx:
+        image: nginx:1.19-alpine
+        restart: always
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ./projects.conf:/etc/nginx/conf.d/projects.conf
+            - ./certbot/www:/var/www/certbot/:ro
+            - ./certbot/conf:/etc/nginx/ssl/:ro
+            - ./certs:/certs
+            - ./logs:/var/log/nginx
+        network_mode: host
+
+    certbot:
+        image: certbot/certbot:latest
+        volumes:
+            - ./certbot/www:/var/www/certbot/:rw
+            - ./certbot/conf:/etc/letsencrypt/:rw
+
