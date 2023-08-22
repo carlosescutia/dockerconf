@@ -1,0 +1,51 @@
+Nuevo proyecto django en docker
+===============================
+
+1. Generar docker-compose.bootstrap.yml con contenido basado en docker-compose.yml (desarrollo) solamente con servicio django. Ej:
+
+    version: '3.8'
+	services:
+        django:
+            build: ./app
+            volumes:
+                - ./app/:/usr/src/app/
+            env_file:
+                - ./.env.dev
+
+2. Para crear proyecto 'config' con app 'blog'
+    - prerequisito: contar con app/requirements.txt
+    - comenzar solamente con versión de Django. Ej:
+        Django==4.1.5
+
+docker-compose -f docker-compose.bootstrap.yml run --rm django django-admin startproject config .
+docker-compose -f docker-compose.bootstrap.yml run --rm django python manage.py startapp blog
+
+
+3. Agregar dependencias
+
+docker-compose -f docker-compose.bootstrap.yml run --rm django ash -c "python3 -m pip install psycopg2-binary Pillow gunicorn && python3 -m pip freeze > requirements.txt"
+
+
+4. Corregir permisos:
+
+sudo chown carlos: app -R
+
+
+5. Iniciar ambiente de desarrollo
+
+docker-compose up -d --build --no-cache
+
+
+6. Comprobar dependencias instaladas
+
+docker-compose exec django ash
+python3 -m pip freeze
+    asgiref==3.6.0
+    Django==4.1.5
+    gunicorn==20.1.0
+    Pillow==9.5.0
+    psycopg2-binary==2.9.6
+    sqlparse==0.4.4
+
+7. Configurar archivos settings.py y urls.py
+	Utilizar archivos de ejemplo en directorio django_settings/

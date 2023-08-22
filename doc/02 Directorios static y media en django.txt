@@ -1,0 +1,44 @@
+Directorios static y media en django
+------------------------------------
+
+Situación
+    - Confusión en cómo funcionan directorios static y media en dev y en producción.
+
+Comprobar:
+    - Si al correr migraciones, se copian archivos existentes de dev (directorio) a prod (volumen) -> sí.
+
+Conclusiones
+    - Tanto en dev c' en prod, se copian los directorios staticfiles y mediafiles a contenedores django y nginx.
+    - En dev se consumen directamente los archivos de esos directorios.
+    - En prod SE MONTAN volumenes c' mismos nombres, efectivamente superponiéndose a contenido original.
+
+
+Django static
+-------------
+
+Situación
+    - Durante desarrollo, se generan y llenan los directorios estáticos:
+        app/
+            static/
+              ...
+            mediafiles/
+              ...
+    - Al correr servidor web de desarrollo, estos dos directorios son servidos directamente, sin problema, por directiva en config/urls.py:
+        if settings.DEBUG:
+            MEDIA_URL, MEDIA_ROOT
+            STATIC_URL, STATIC_ROOT
+    (definidos ambos en config/settings.py)
+    - Django busca archivos static dentro de c' app en directorio static, y además en directorios definidos en STATICFILES_DIRS (settings.py)
+        ** Y LOS PUBLICA TODOS EN LA URL STATIC_URL ("static/", normalmente, en settings.py) **
+    - En producción se tiene q' servir explícitamente contenido de static mediante servidor web (nginx). Se debe correr proceso collectstatic q' toma todos los archivos static y los almacena en directorio STATIC_ROOT ("staticfiles/", normalmente, settings.py) por lo q' deben estar presentes estos archivos static al ejecutar el proceso.
+
+
+Estructura final de proyecto django
+-----------------------------------
+
+    app/                        El proyecto django
+        config/                 nombrar así
+        globalstatic/
+        app_name/               apps del proyecto
+        mediafiles/             montar con bindmounts en docker
+        staticfiles/            montar con bindmounts en docker

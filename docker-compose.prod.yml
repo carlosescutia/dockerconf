@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+    nginx:
+        build: ./docker/nginx
+        restart: "no"
+        volumes:
+            - ./app/staticfiles:/home/app/web/staticfiles
+            - ./app/mediafiles:/home/app/web/mediafiles
+        ports:
+            - 80:80
+        depends_on:
+            - django
+
+    django:
+        build: 
+            context: ./app
+            dockerfile: Dockerfile.prod
+        restart: "no"
+        command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+        volumes:
+            - ./app/staticfiles:/home/app/web/staticfiles
+            - ./app/mediafiles:/home/app/web/mediafiles
+        expose:
+            - 8000
+        env_file:
+            - ./.env.prod
+        depends_on:
+            - postgres
+
+    postgres:
+        image: postgres:13.0-alpine
+        restart: "no"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data/
+            - ./backup:/backup
+        env_file:
+            - ./.env.prod.db
+
+volumes:
+    postgres_data:

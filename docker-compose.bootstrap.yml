@@ -1,0 +1,11 @@
+# Uso:
+
+version: '3.8'
+
+services:
+    django:
+        build: ./app
+        volumes:
+            - ./app/:/usr/src/app/
+        env_file:
+            - ./.env.dev

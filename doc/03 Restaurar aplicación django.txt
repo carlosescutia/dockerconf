@@ -1,0 +1,37 @@
+Restaurar aplicación django
+---------------------------
+
+
+generar migraciones
+-------------------
+docker-compose exec django python manage.py makemigrations
+
+ejecutar migraciones
+--------------------
+docker-compose exec django python manage.py migrate
+
+restaurar respaldo de bd
+------------------------
+docker-compose exec postgres bash
+cd /backup/csv
+
+	si se tienen archivos csv
+	-------------------------
+	psql -U siseval -f /db/crear_bd.sql
+	psql -U siseval -f /db/vistas.sql
+	../bin/csv2tbl.sh
+
+	si se tiene respaldo pgsql
+	--------------------------
+	pg_restore -U siseval -d siseval --verbose db_siseval_ddmmyy.pgsql
+
+
+recolectar recursos static
+--------------------------
+docker-compose exec django python manage.py collectstatic --no-input --clear
+
+crear superusuario
+------------------
+docker-compose exec django python manage.py createsuperuser
+
+

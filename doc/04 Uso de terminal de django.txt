@@ -1,0 +1,12 @@
+Uso de terminal de django
+-------------------------
+
+docker-compose exec django ash
+python manage.py shell
+from infomun.models import Documento
+doc = Documento.objects.get(id=3)
+>>> doc.archivo.url
+'/media/docs/MENU_VITAL_JUICE.pdf'
+>>> doc.archivo.path
+'/usr/src/app/media/docs/MENU_VITAL_JUICE.pdf'
+
