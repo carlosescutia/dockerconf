@@ -1,0 +1,52 @@
+############################################
+# wordpress - proyecto wordpress
+############################################
+
+version: '3'
+
+services:
+
+    nginx:
+        image: nginx:1.19-alpine
+        restart: "no"
+        build: ./docker/nginx
+        ports:
+            - 80:80
+        networks:
+            default:
+                aliases:
+                    - wpsite.sitio.test
+        volumes:
+            - ./app:/var/www/app
+            - ./docker/nginx/conf.d:/etc/nginx/conf.d
+            - ./logs:/var/log/nginx
+        depends_on:
+            - php
+
+    php:
+        image: php7.4-fpm-alpine-mysql8
+        restart: "no"
+        build: ./docker/app
+        working_dir: /var/www/app
+        volumes:
+            - ./docker/app/upload.ini:/usr/local/etc/php/conf.d/upload.ini
+            - ./app:/var/www/app
+        depends_on:
+            - mysql
+
+    mysql:
+        image: mysql:8.0
+        restart: "no"
+        environment:
+            MYSQL_DATABASE: wordpress
+            MYSQL_USER: wordpress
+            MYSQL_PASSWORD: wordpress
+            MYSQL_ROOT_PASSWORD: holahola
+        security_opt:
+            - seccomp:unconfined
+        volumes:
+            - mysqldata:/var/lib/mysql
+            - ./backup:/backup
+
+volumes:
+    mysqldata:
