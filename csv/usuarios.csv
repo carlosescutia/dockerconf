@@ -1,0 +1,3 @@
+cve_usuario,cve_organizacion,cve_rol,nom_usuario,usuario,password,activo
+1,1,adm,Administrador,admon,hola,1
+2,1,usr,Usuario1,usuario1,hola,1

@@ -1,0 +1,8 @@
+cve_parametro_sistema,nom_parametro_sistema,valor_parametro_sistema
+16,nom_sitio_corto,RoboCtrl
+14,nom_sitio_largo,Panel de control de Robocop
+17,nom_org_sitio,OCP
+18,anio_org_sitio,2087
+19,tel_org_sitio,(555) 1123 4579
+20,correo_org_sitio,ed209@ocp.com
+21,logo_org_sitio,logo_ocp.png

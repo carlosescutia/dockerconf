@@ -1,0 +1,5 @@
+cve_opcion,cod_opcion,nom_opcion,url,es_menu
+4,4,Reportes,reportes,1
+5,5,Catalogos,catalogos,1
+6,99,Edicion,,0
+1,1,Inicio,admin,1
