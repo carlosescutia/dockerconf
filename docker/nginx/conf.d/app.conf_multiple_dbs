@@ -1,0 +1,63 @@
+server {
+      listen 80;
+      server_name gym.pventa.com;
+      return 301 http://pventa.com/?db=gym;
+}
+
+server {
+      listen 80;
+      server_name tienda.pventa.com;
+      return 301 http://pventa.com/?db=tienda;
+}
+
+server {
+      listen 80;
+      server_name trinidad.pventa.com;
+      return 301 http://pventa.com/?db=trinidad;
+}
+
+server {
+      listen 80;
+      server_name pventa.com;
+    
+      # increase proxy buffer to handle some Odoo web requests
+     # proxy_buffers 16 64k;
+     # proxy_buffer_size 128k;
+      
+      # Specifies the maximum accepted body size of a client request,
+      # as indicated by the request header Content-Length.
+      #client_max_body_size 200m;
+
+      location / {
+        proxy_pass http://odoo:8069$request_uri;
+        # force timeouts if the backend dies
+        proxy_read_timeout 600s;
+        proxy_next_upstream error timeout invalid_header http_500 http_502 http_503 http_504;
+        proxy_redirect off;
+
+        # set headers
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      }
+      
+      # cache some static data in memory for 60mins.
+      # under heavy load this should relieve stress on the OpenERP web interface a bit.
+      location ~* /web/static/ {
+        proxy_cache_valid 200 60m;
+        proxy_buffering    on;
+        expires 864000;
+        proxy_pass http://odoo:8069;
+	  }
+
+	  location /web/database/selector {
+	      return 301 http://pventa.com;
+      }
+
+      location /web/database/manager {
+          auth_basic "Restricted content";
+          auth_basic_user_file /etc/nginx/conf.d/htpasswd;
+          proxy_pass http://odoo:8069$request_uri;
+      }
+}
+

@@ -1,0 +1,48 @@
+##########################
+# odoo - Proyecto odoo16+
+##########################
+
+version: '3.1'
+services:
+    nginx:
+        image: nginx:1.19-alpine
+        restart: "no"
+        ports:
+            - 80:80
+        volumes:
+            - ./docker/nginx/conf.d:/etc/nginx/conf.d
+            - ./logs:/var/log/nginx
+        environment:
+            - WEBSOCKET=true
+        depends_on:
+            - odoo
+
+    odoo:
+        image: odoo:16
+        restart: "no"
+        volumes:
+            - ./extra-addons:/mnt/extra-addons
+            - ./docker/app/odoo.conf:/etc/odoo/odoo.conf
+            - odoo-data:/var/lib/odoo
+        environment:
+            - HOST=postgres
+            - PORT=5432
+            - USER=odoo
+            - PASSWORD=odoo
+            - WEBSOCKET=true
+        depends_on:
+            - postgres
+
+    postgres:
+        image: postgres:15-alpine
+        restart: "no"
+        environment:
+            POSTGRES_USER: odoo
+            POSTGRES_PASSWORD: odoo
+            POSTGRES_DB: postgres
+        volumes:
+            - data:/var/lib/postgresql/data
+            - ./backup:/backup
+volumes:
+    data: {}
+    odoo-data: {}
