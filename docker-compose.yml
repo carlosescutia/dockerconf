@@ -1,0 +1,47 @@
+######################################
+# phpapp - Proyecto php
+######################################
+#
+
+version: '3'
+services:
+    nginx:
+        image: nginx:1.19-alpine
+        restart: "no"
+        ports:
+            - 80:80
+        volumes:
+            - ./docker/nginx/conf.d:/etc/nginx/conf.d
+            - ./app:/var/www/app
+            - ./logs:/var/log/nginx
+        depends_on:
+            - php
+
+    php:
+        image: php7.4-fpm-alpine-pg10
+        restart: "no"
+        build: ./docker/app
+        volumes:
+            - ./docker/app/php.ini:/usr/local/etc/php/conf.d/php.ini
+            - ./app:/var/www/app
+        env_file:
+            - ./.env.dev
+        depends_on:
+            - postgres
+
+    postgres:
+        image: postgres:10-alpine
+        restart: "no"
+        environment:
+            POSTGRES_USER: phpapp
+            POSTGRES_PASSWORD: phpapp
+            POSTGRES_DB: phpapp
+        expose:
+            - "5432"
+        volumes:
+            - data:/var/lib/postgresql/data
+            - ./backup:/backup
+            - ./app/application/db:/db
+
+volumes:
+    data: {}
