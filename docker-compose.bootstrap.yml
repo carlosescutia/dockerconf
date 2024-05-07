@@ -1,10 +1,12 @@
-# Uso:
-
-version: '3.8'
+# docker-compose.bootstrap.yml
+# create initial django environment 
+#
 
 services:
     django:
-        build: ./app
+        build: 
+            context: app
+            dockerfile: ../docker/app/Dockerfile
         volumes:
             - ./app/:/usr/src/app/
         env_file:

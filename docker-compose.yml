@@ -1,8 +1,12 @@
-version: '3.8'
+# docker-compose.yml
+# run django project in development
+#
 
 services:
     django:
-        build: ./app
+        build: 
+            context: app
+            dockerfile: ../docker/app/Dockerfile
         command: python manage.py runserver 0.0.0.0:8000
         volumes:
             - ./app/:/usr/src/app/
