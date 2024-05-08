@@ -9,6 +9,8 @@ services:
         volumes:
             - ./app/staticfiles:/home/app/web/staticfiles
             - ./app/mediafiles:/home/app/web/mediafiles
+        environment:
+            - TZ=America/Mexico_City
         ports:
             - 80:80
         depends_on:
@@ -25,6 +27,8 @@ services:
             - ./app/mediafiles:/home/app/web/mediafiles
         expose:
             - 8000
+        environment:
+            - TZ=America/Mexico_City
         env_file:
             - ./.env.prod
         depends_on:
@@ -36,6 +40,8 @@ services:
         volumes:
             - postgres_data:/var/lib/postgresql/data/
             - ./backup:/backup
+        environment:
+            - TZ=America/Mexico_City
         env_file:
             - ./.env.prod.db
 

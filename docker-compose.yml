@@ -12,6 +12,8 @@ services:
             - ./app/:/usr/src/app/
         ports:
             - 80:8000
+        environment:
+            - TZ=America/Mexico_City
         env_file:
             - ./.env.dev
     postgres:
@@ -23,6 +25,7 @@ services:
             - POSTGRES_USER=django_template
             - POSTGRES_PASSWORD=django_template
             - POSTGRES_DB=django_template
+            - TZ=America/Mexico_City
 
 volumes:
     postgres_data:
