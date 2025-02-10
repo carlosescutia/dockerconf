@@ -1,4 +1,4 @@
-cve_rol,nom_rol
+cve_rol,nombre
 usr,usuario
 sup,supervisor
 adm,administrador

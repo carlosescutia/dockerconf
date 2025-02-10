@@ -1,0 +1,12 @@
+id_opcion_sistema,cod_opcion_sistema,nom_opcion_sistema,otorgable
+1,reportes.can_view,Ver Reportes,
+2,reportes_usuario.can_view,Ver Reportes usuario,
+3,reportes_supervisor.can_view,Ver Reportes supervisor,
+4,reportes_administrador.can_view,Ver Reportes administrador,
+5,catalogos.can_view,Ver Catalogos,
+6,organizacion.can_edit,Editar Organización,
+7,usuario.can_edit,Editar Usuario,
+8,rol.can_edit,Editar Rol,
+9,opcion_sistema.can_edit,Editar Opción sistema,
+10,acceso_sistema.can_edit,Editar Acceso sistema,
+11,parametro_sistema.can_edit,Editar Parametro sistema,

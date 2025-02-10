@@ -1,0 +1,12 @@
+id_acceso_sistema,id_rol,cod_opcion_sistema
+1,adm,reportes.can_view
+2,adm,catalogos.can_view
+3,adm,organizacion.can_edit
+4,adm,usuario.can_edit
+5,adm,rol.can_edit
+6,adm,opcion_sistema.can_edit
+7,adm,acceso_sistema.can_edit
+8,adm,parametro_sistema.can_edit
+9,adm,reportes_administrador.can_view
+10,usr,reportes.can_view
+11,usr,reportes_usuario.can_view
