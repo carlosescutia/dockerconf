@@ -1,13 +1,15 @@
 ######################################
-# phpapp - Proyecto php
+# phpapp4 - Proyecto php CI4
 ######################################
 #
 
-version: '3'
 services:
     nginx:
-        image: nginx:1.19-alpine
+        image: nginx:1.29-alpine
         restart: "no"
+        build: ./docker/nginx
+        env_file:
+            - ./.env
         ports:
             - 80:80
         volumes:
@@ -18,30 +20,26 @@ services:
             - php
 
     php:
-        image: php7.4-fpm-alpine-pg10
+        image: php8.4-fpm-alpine-pg17
         restart: "no"
         build: ./docker/app
+        env_file:
+            - ./.env
         volumes:
             - ./docker/app/php.ini:/usr/local/etc/php/conf.d/php.ini
             - ./app:/var/www/app
-        env_file:
-            - ./.env.dev
         depends_on:
             - postgres
 
     postgres:
-        image: postgres:10-alpine
+        image: postgres:17-alpine
         restart: "no"
-        environment:
-            POSTGRES_USER: phpapp
-            POSTGRES_PASSWORD: phpapp
-            POSTGRES_DB: phpapp
-        expose:
-            - "5432"
+        env_file:
+            - ./.env
         volumes:
             - data:/var/lib/postgresql/data
             - ./backup:/backup
-            - ./app/application/db:/db
+            #- ./app/application/db:/db
 
 volumes:
     data: {}
